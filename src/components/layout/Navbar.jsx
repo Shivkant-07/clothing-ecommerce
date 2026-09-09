@@ -1,3 +1,4 @@
+
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Heart,
@@ -8,15 +9,20 @@ import {
   X,
 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+
+import { useShop } from "../../context/ShopContext";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const { cartCount, wishlistCount } = useShop();
+
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Categories", href: "#categories" },
-    { name: "New Arrivals", href: "#new-arrivals" },
-    { name: "Trending", href: "#trending" },
+    { name: "Categories", href: "/categories" },
+    { name: "New Arrivals", href: "/new-arrivals" },
+    { name: "Trending", href: "/trending" },
   ];
 
   return (
@@ -24,72 +30,113 @@ const Navbar = () => {
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10">
 
         {/* Logo */}
-        <a
-          href="/"
+        <Link
+          to="/"
+          onClick={() => setMenuOpen(false)}
           className="text-2xl font-bold tracking-[0.2em] text-black sm:text-3xl"
         >
           VELORA
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden items-center gap-8 lg:flex">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.name}
-              href={link.href}
-              className="relative text-sm font-medium text-gray-700 transition-colors duration-300 hover:text-black"
+              to={link.href}
+              className="group relative text-sm font-medium text-gray-700 transition-colors duration-300 hover:text-black"
             >
               {link.name}
 
               <span className="absolute -bottom-2 left-0 h-px w-0 bg-black transition-all duration-300 group-hover:w-full" />
-            </a>
+            </Link>
           ))}
         </nav>
 
-        {/* Actions */}
+        {/* Right Actions */}
         <div className="flex items-center gap-1 sm:gap-3">
+
+          {/* Search */}
           <button
+            type="button"
             aria-label="Search"
             className="rounded-full p-2.5 transition-all duration-300 hover:bg-gray-100"
           >
-            <Search size={20} strokeWidth={1.8} />
+            <Search
+              size={20}
+              strokeWidth={1.8}
+            />
           </button>
 
+          {/* Account */}
           <button
+            type="button"
             aria-label="Account"
             className="hidden rounded-full p-2.5 transition-all duration-300 hover:bg-gray-100 sm:block"
           >
-            <User size={20} strokeWidth={1.8} />
+            <User
+              size={20}
+              strokeWidth={1.8}
+            />
           </button>
 
-          <button
+          {/* Wishlist */}
+          <Link
+            to="/wishlist"
             aria-label="Wishlist"
-            className="hidden rounded-full p-2.5 transition-all duration-300 hover:bg-gray-100 sm:block"
-          >
-            <Heart size={20} strokeWidth={1.8} />
-          </button>
-
-          <button
-            aria-label="Shopping bag"
             className="relative rounded-full p-2.5 transition-all duration-300 hover:bg-gray-100"
           >
-            <ShoppingBag size={20} strokeWidth={1.8} />
+            <Heart
+              size={20}
+              strokeWidth={1.8}
+              fill={wishlistCount > 0 ? "currentColor" : "none"}
+              className={
+                wishlistCount > 0
+                  ? "text-red-500"
+                  : "text-gray-700"
+              }
+            />
+
+            {wishlistCount > 0 && (
+              <span className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[9px] font-semibold text-white">
+                {wishlistCount}
+              </span>
+            )}
+          </Link>
+
+          {/* Cart */}
+          <Link
+            to="/cart"
+            aria-label="Shopping cart"
+            className="relative rounded-full p-2.5 transition-all duration-300 hover:bg-gray-100"
+          >
+            <ShoppingBag
+              size={20}
+              strokeWidth={1.8}
+            />
 
             <span className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-black text-[9px] font-semibold text-white">
-              0
+              {cartCount}
             </span>
-          </button>
+          </Link>
 
           {/* Mobile Menu Button */}
           <button
+            type="button"
             aria-label="Toggle menu"
             onClick={() => setMenuOpen((prev) => !prev)}
             className="rounded-full p-2.5 transition-all duration-300 hover:bg-gray-100 lg:hidden"
           >
             {menuOpen ? (
-              <X size={23} strokeWidth={1.8} />
+              <X
+                size={23}
+                strokeWidth={1.8}
+              />
             ) : (
-              <Menu size={23} strokeWidth={1.8} />
+              <Menu
+                size={23}
+                strokeWidth={1.8}
+              />
             )}
           </button>
         </div>
@@ -99,38 +146,103 @@ const Navbar = () => {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            initial={{
+              height: 0,
+              opacity: 0,
+            }}
+            animate={{
+              height: "auto",
+              opacity: 1,
+            }}
+            exit={{
+              height: 0,
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.3,
+              ease: "easeInOut",
+            }}
             className="overflow-hidden border-t border-black/10 bg-white lg:hidden"
           >
             <nav className="mx-auto flex max-w-7xl flex-col px-5 py-5 sm:px-8">
+
+              {/* Navigation Links */}
               {navLinks.map((link, index) => (
-                <motion.a
+                <motion.div
                   key={link.name}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  initial={{ x: -15, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: index * 0.05 }}
-                  className="border-b border-black/5 py-4 text-sm font-medium text-gray-700 transition-colors hover:text-black"
+                  initial={{
+                    x: -15,
+                    opacity: 0,
+                  }}
+                  animate={{
+                    x: 0,
+                    opacity: 1,
+                  }}
+                  transition={{
+                    delay: index * 0.05,
+                  }}
                 >
-                  {link.name}
-                </motion.a>
+                  <Link
+                    to={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="block border-b border-black/5 py-4 text-sm font-medium text-gray-700 transition-colors hover:text-black"
+                  >
+                    {link.name}
+                  </Link>
+                </motion.div>
               ))}
 
+              {/* Mobile Account / Wishlist */}
               <div className="flex gap-2 pt-4 sm:hidden">
-                <button className="flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-200 py-3 text-sm">
+
+                <button
+                  type="button"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-200 py-3 text-sm transition hover:bg-gray-50"
+                >
                   <User size={17} />
                   Account
                 </button>
 
-                <button className="flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-200 py-3 text-sm">
-                  <Heart size={17} />
+                <Link
+                  to="/wishlist"
+                  onClick={() => setMenuOpen(false)}
+                  className="relative flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-200 py-3 text-sm transition hover:bg-gray-50"
+                >
+                  <Heart
+                    size={17}
+                    className={
+                      wishlistCount > 0
+                        ? "text-red-500"
+                        : "text-gray-700"
+                    }
+                    fill={
+                      wishlistCount > 0
+                        ? "currentColor"
+                        : "none"
+                    }
+                  />
+
                   Wishlist
-                </button>
+
+                  {wishlistCount > 0 && (
+                    <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white">
+                      {wishlistCount}
+                    </span>
+                  )}
+                </Link>
+
               </div>
+
+              {/* Mobile Cart */}
+              <Link
+                to="/cart"
+                onClick={() => setMenuOpen(false)}
+                className="mt-3 flex items-center justify-center gap-2 rounded-full bg-black py-3 text-sm font-medium text-white transition hover:bg-gray-800 sm:hidden"
+              >
+                <ShoppingBag size={17} />
+                Cart ({cartCount})
+              </Link>
+
             </nav>
           </motion.div>
         )}
