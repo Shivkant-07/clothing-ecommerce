@@ -12,9 +12,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useShop } from "../../context/ShopContext";
+import SearchBar from "../common/Searchbar";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const { cartCount, wishlistCount } = useShop();
 
@@ -25,14 +27,25 @@ const Navbar = () => {
     { name: "Trending", href: "/trending" },
   ];
 
+  const closeMenu = () => {
+    setMenuOpen(false);
+  };
+
+  const toggleSearch = () => {
+    setSearchOpen((prev) => !prev);
+    setMenuOpen(false);
+  };
+
   return (
-    <header className="sticky top-0 z-50 border-b border-black/10 bg-white/95 backdrop-blur-md">
+    <header className="relative sticky top-0 z-50 border-b border-black/10 bg-white/95 backdrop-blur-md">
+
+      {/* Main Navbar */}
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10">
 
         {/* Logo */}
         <Link
           to="/"
-          onClick={() => setMenuOpen(false)}
+          onClick={closeMenu}
           className="text-2xl font-bold tracking-[0.2em] text-black sm:text-3xl"
         >
           VELORA
@@ -53,19 +66,23 @@ const Navbar = () => {
           ))}
         </nav>
 
-        {/* Right Actions */}
+        {/* Right Side Actions */}
         <div className="flex items-center gap-1 sm:gap-3">
 
           {/* Search */}
           <button
             type="button"
             aria-label="Search"
-            className="rounded-full p-2.5 transition-all duration-300 hover:bg-gray-100"
+            onClick={toggleSearch}
+            className={`rounded-full p-2.5 transition-all duration-300 hover:bg-gray-100 ${
+              searchOpen ? "bg-gray-100" : ""
+            }`}
           >
-            <Search
-              size={20}
-              strokeWidth={1.8}
-            />
+            {searchOpen ? (
+              <X size={20} strokeWidth={1.8} />
+            ) : (
+              <Search size={20} strokeWidth={1.8} />
+            )}
           </button>
 
           {/* Account */}
@@ -120,11 +137,14 @@ const Navbar = () => {
             </span>
           </Link>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu */}
           <button
             type="button"
             aria-label="Toggle menu"
-            onClick={() => setMenuOpen((prev) => !prev)}
+            onClick={() => {
+              setMenuOpen((prev) => !prev);
+              setSearchOpen(false);
+            }}
             className="rounded-full p-2.5 transition-all duration-300 hover:bg-gray-100 lg:hidden"
           >
             {menuOpen ? (
@@ -141,6 +161,12 @@ const Navbar = () => {
           </button>
         </div>
       </div>
+
+      {/* Search Bar */}
+      <SearchBar
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+      />
 
       {/* Mobile Menu */}
       <AnimatePresence>
@@ -184,7 +210,7 @@ const Navbar = () => {
                 >
                   <Link
                     to={link.href}
-                    onClick={() => setMenuOpen(false)}
+                    onClick={closeMenu}
                     className="block border-b border-black/5 py-4 text-sm font-medium text-gray-700 transition-colors hover:text-black"
                   >
                     {link.name}
@@ -192,9 +218,10 @@ const Navbar = () => {
                 </motion.div>
               ))}
 
-              {/* Mobile Account / Wishlist */}
+              {/* Mobile Account + Wishlist */}
               <div className="flex gap-2 pt-4 sm:hidden">
 
+                {/* Account */}
                 <button
                   type="button"
                   className="flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-200 py-3 text-sm transition hover:bg-gray-50"
@@ -203,22 +230,23 @@ const Navbar = () => {
                   Account
                 </button>
 
+                {/* Wishlist */}
                 <Link
                   to="/wishlist"
-                  onClick={() => setMenuOpen(false)}
+                  onClick={closeMenu}
                   className="relative flex flex-1 items-center justify-center gap-2 rounded-full border border-gray-200 py-3 text-sm transition hover:bg-gray-50"
                 >
                   <Heart
                     size={17}
-                    className={
-                      wishlistCount > 0
-                        ? "text-red-500"
-                        : "text-gray-700"
-                    }
                     fill={
                       wishlistCount > 0
                         ? "currentColor"
                         : "none"
+                    }
+                    className={
+                      wishlistCount > 0
+                        ? "text-red-500"
+                        : "text-gray-700"
                     }
                   />
 
@@ -230,13 +258,12 @@ const Navbar = () => {
                     </span>
                   )}
                 </Link>
-
               </div>
 
               {/* Mobile Cart */}
               <Link
                 to="/cart"
-                onClick={() => setMenuOpen(false)}
+                onClick={closeMenu}
                 className="mt-3 flex items-center justify-center gap-2 rounded-full bg-black py-3 text-sm font-medium text-white transition hover:bg-gray-800 sm:hidden"
               >
                 <ShoppingBag size={17} />
@@ -247,6 +274,7 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
     </header>
   );
 };
