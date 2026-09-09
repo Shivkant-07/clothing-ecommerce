@@ -1,139 +1,179 @@
-import { useState, useEffect } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import AuthCard from './components/auth/AuthCard'
-import './App.css'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
+import ProductCard from "./components/common/ProductCard";
 
-  // Route support: check hash for starter or auth
-  const [currentView, setCurrentView] = useState(() => {
-    const hash = window.location.hash
-    if (hash === '#/starter' || hash === '#/home') return 'starter'
-    if (hash === '#/register') return 'register'
-    return 'auth'
-  })
+import Home from "./pages/home/Home";
+import Categories from "./pages/categories/Categories";
+import Wishlist from "./pages/Wishlist/Wishlist";
+import Cart from "./pages/Cart/Cart";
 
-  useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash
-      if (hash === '#/starter' || hash === '#/home') {
-        setCurrentView('starter')
-      } else if (hash === '#/register') {
-        setCurrentView('register')
-      } else {
-        setCurrentView('auth')
-      }
-    }
+import products from "./data/products";
 
-    window.addEventListener('hashchange', handleHashChange)
-    return () => window.removeEventListener('hashchange', handleHashChange)
-  }, [])
+// ===============================
+// Category Products Page
+// ===============================
 
-  // If hash is explicitly #/starter, display existing team starter code
-  if (currentView === 'starter') {
-    return (
-      <>
-        <section id="center">
-          <div className="hero">
-            <img src={heroImg} className="base" width="170" height="179" alt="" />
-            <img src={reactLogo} className="framework" alt="React logo" />
-            <img src={viteLogo} className="vite" alt="Vite logo" />
-          </div>
-          <div>
-            <h1>Get started</h1>
-            <p>
-              Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-            </p>
-          </div>
-          <button
-            type="button"
-            className="counter"
-            onClick={() => setCount((c) => c + 1)}
-          >
-            Count is {count}
-          </button>
-        </section>
+function CategoryProducts({ category }) {
+  const categoryProducts = products.filter(
+    (product) => product.categorySlug === category.toLowerCase()
+  );
 
-        <div className="ticks"></div>
-
-        <section id="next-steps">
-          <div id="docs">
-            <svg className="icon" role="presentation" aria-hidden="true">
-              <use href="/icons.svg#documentation-icon"></use>
-            </svg>
-            <h2>Documentation</h2>
-            <p>Your questions, answered</p>
-            <ul>
-              <li>
-                <a href="https://vite.dev/" target="_blank" rel="noreferrer">
-                  <img className="logo" src={viteLogo} alt="" />
-                  Explore Vite
-                </a>
-              </li>
-              <li>
-                <a href="https://react.dev/" target="_blank" rel="noreferrer">
-                  <img className="button-icon" src={reactLogo} alt="" />
-                  Learn more
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div id="social">
-            <svg className="icon" role="presentation" aria-hidden="true">
-              <use href="/icons.svg#social-icon"></use>
-            </svg>
-            <h2>Connect with us</h2>
-            <p>Join the Vite community</p>
-            <ul>
-              <li>
-                <a href="https://github.com/vitejs/vite" target="_blank" rel="noreferrer">
-                  <svg className="button-icon" role="presentation" aria-hidden="true">
-                    <use href="/icons.svg#github-icon"></use>
-                  </svg>
-                  GitHub
-                </a>
-              </li>
-              <li>
-                <a href="https://chat.vite.dev/" target="_blank" rel="noreferrer">
-                  <svg className="button-icon" role="presentation" aria-hidden="true">
-                    <use href="/icons.svg#discord-icon"></use>
-                  </svg>
-                  Discord
-                </a>
-              </li>
-              <li>
-                <a href="https://x.com/vite_js" target="_blank" rel="noreferrer">
-                  <svg className="button-icon" role="presentation" aria-hidden="true">
-                    <use href="/icons.svg#x-icon"></use>
-                  </svg>
-                  X.com
-                </a>
-              </li>
-              <li>
-                <a href="https://bsky.app/profile/vite.dev" target="_blank" rel="noreferrer">
-                  <svg className="button-icon" role="presentation" aria-hidden="true">
-                    <use href="/icons.svg#bluesky-icon"></use>
-                  </svg>
-                  Bluesky
-                </a>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <div className="ticks"></div>
-        <section id="spacer"></section>
-      </>
-    )
-  }
-
-  // Pure clean centered Auth experience directly matching screenshot
   return (
-    <AuthCard initialTab={currentView === 'register' ? 'register' : 'login'} />
-  )
+    <main className="min-h-screen bg-[#f8f7f4] px-5 py-20 sm:px-8 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
+          VELORA Collection
+        </p>
+
+        <h1 className="mt-3 text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+          {category}
+        </h1>
+
+        <p className="mt-4 text-gray-500">
+          Explore our {category.toLowerCase()} collection.
+        </p>
+
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {categoryProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+
+        {categoryProducts.length === 0 && (
+          <p className="mt-12 text-gray-500">
+            No products available in this category.
+          </p>
+        )}
+      </div>
+    </main>
+  );
 }
 
-export default App
+// ===============================
+// New Arrivals Page
+// ===============================
+
+function NewArrivalsPage() {
+  const newProducts = products.filter((product) => product.isNew);
+
+  return (
+    <main className="min-h-screen bg-[#f8f7f4] px-5 py-20 sm:px-8 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
+          Fresh Picks
+        </p>
+
+        <h1 className="mt-3 text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+          New Arrivals
+        </h1>
+
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {newProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </div>
+    </main>
+  );
+}
+
+// ===============================
+// Trending Products Page
+// ===============================
+
+function TrendingPage() {
+  const trendingProducts = products.filter(
+    (product) => product.isTrending
+  );
+
+  return (
+    <main className="min-h-screen bg-[#f8f7f4] px-5 py-20 sm:px-8 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
+          Most Wanted
+        </p>
+
+        <h1 className="mt-3 text-4xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+          Trending Now
+        </h1>
+
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {trendingProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </div>
+    </main>
+  );
+}
+
+// ===============================
+// App
+// ===============================
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Navbar />
+
+      <Routes>
+        {/* Home */}
+        <Route path="/" element={<Home />} />
+
+        {/* Categories */}
+        <Route path="/categories" element={<Categories />} />
+
+        {/* Category Products */}
+        <Route
+          path="/categories/men"
+          element={<CategoryProducts category="Men" />}
+        />
+
+        <Route
+          path="/categories/women"
+          element={<CategoryProducts category="Women" />}
+        />
+
+        <Route
+          path="/categories/shoes"
+          element={<CategoryProducts category="Shoes" />}
+        />
+
+        <Route
+          path="/categories/accessories"
+          element={<CategoryProducts category="Accessories" />}
+        />
+
+        {/* New Arrivals */}
+        <Route
+          path="/new-arrivals"
+          element={<NewArrivalsPage />}
+        />
+
+        {/* Trending */}
+        <Route
+          path="/trending"
+          element={<TrendingPage />}
+        />
+
+        {/* Wishlist */}
+        <Route
+          path="/wishlist"
+          element={<Wishlist />}
+        />
+
+        {/* Cart */}
+        <Route
+          path="/cart"
+          element={<Cart />}
+        />
+      </Routes>
+
+      <Footer />
+    </BrowserRouter>
+  );
+}
+
+export default App;
