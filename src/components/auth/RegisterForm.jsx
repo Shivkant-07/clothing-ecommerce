@@ -119,7 +119,6 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
 
     setIsLoading(true);
 
-    // Client-side simulated registration flow
     setTimeout(() => {
       setIsLoading(false);
       if (showToast) {
@@ -140,7 +139,7 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
   const handleQuickFill = () => {
     setFormData({
       fullName: 'Alex Johnson',
-      email: 'alex.johnson@example.com',
+      email: 'alex@example.com',
       password: 'Password123!',
       confirmPassword: 'Password123!',
       agreeTerms: true,
@@ -172,15 +171,15 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
   const strength = getPasswordStrength(formData.password);
 
   return (
-    <div className="auth-form-container">
+    <div className="auth-form-body">
       {/* Subtitle & Quick Auto-fill */}
-      <div className="auth-header-row">
-        <p className="auth-subtitle">Create a new account</p>
+      <div className="auth-header-action">
+        <p className="auth-subtitle-text">Create a new account</p>
         <button
           type="button"
           onClick={handleQuickFill}
-          className="auth-demo-btn"
-          title="Fill valid test credentials in one click"
+          className="auth-demo-badge"
+          title="Auto-fill demo credentials"
         >
           <SparklesIcon size={12} />
           <span>Demo Fill</span>
@@ -188,16 +187,14 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="auth-form" noValidate>
+      <form onSubmit={handleSubmit} className="auth-fields-stack" noValidate>
         {/* Full Name */}
-        <div className="auth-field">
-          <label htmlFor="register-name" className="auth-label">
-            <span>
-              Full Name<span className="auth-required">*</span>
-            </span>
+        <div className="auth-input-group">
+          <label htmlFor="register-name" className="auth-field-label">
+            FULL NAME <span className="auth-field-asterisk">*</span>
           </label>
-          <div className="auth-input-container">
-            <span className="auth-input-icon">
+          <div className="auth-input-box">
+            <span className="auth-box-icon">
               <UserIcon size={16} />
             </span>
             <input
@@ -209,16 +206,16 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
               onChange={handleChange}
               onBlur={handleBlur}
               placeholder="e.g. Alex Johnson"
-              className={`auth-input ${touched.fullName && errors.fullName ? 'is-error' : ''} ${isNameSuccess ? 'is-valid' : ''}`}
+              className={`auth-text-input ${touched.fullName && errors.fullName ? 'has-error' : ''} ${isNameSuccess ? 'has-valid' : ''}`}
             />
             {isNameSuccess && (
-              <span className="auth-input-check" title="Valid name">
+              <span className="auth-box-success" title="Valid name">
                 <CheckIcon size={14} />
               </span>
             )}
           </div>
           {touched.fullName && errors.fullName && (
-            <div className="auth-error-text" role="alert">
+            <div className="auth-error-alert" role="alert">
               <AlertCircleIcon size={13} />
               <span>{errors.fullName}</span>
             </div>
@@ -226,14 +223,12 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
         </div>
 
         {/* Email Address */}
-        <div className="auth-field">
-          <label htmlFor="register-email" className="auth-label">
-            <span>
-              Email Address<span className="auth-required">*</span>
-            </span>
+        <div className="auth-input-group">
+          <label htmlFor="register-email" className="auth-field-label">
+            EMAIL ADDRESS <span className="auth-field-asterisk">*</span>
           </label>
-          <div className="auth-input-container">
-            <span className="auth-input-icon">
+          <div className="auth-input-box">
+            <span className="auth-box-icon">
               <MailIcon size={16} />
             </span>
             <input
@@ -245,16 +240,16 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
               onChange={handleChange}
               onBlur={handleBlur}
               placeholder="e.g. alex@example.com"
-              className={`auth-input ${touched.email && errors.email ? 'is-error' : ''} ${isEmailSuccess ? 'is-valid' : ''}`}
+              className={`auth-text-input ${touched.email && errors.email ? 'has-error' : ''} ${isEmailSuccess ? 'has-valid' : ''}`}
             />
             {isEmailSuccess && (
-              <span className="auth-input-check" title="Valid email format">
+              <span className="auth-box-success" title="Valid email format">
                 <CheckIcon size={14} />
               </span>
             )}
           </div>
           {touched.email && errors.email && (
-            <div className="auth-error-text" role="alert">
+            <div className="auth-error-alert" role="alert">
               <AlertCircleIcon size={13} />
               <span>{errors.email}</span>
             </div>
@@ -262,14 +257,12 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
         </div>
 
         {/* Create Password */}
-        <div className="auth-field">
-          <label htmlFor="register-password" className="auth-label">
-            <span>
-              Create Password<span className="auth-required">*</span>
-            </span>
+        <div className="auth-input-group">
+          <label htmlFor="register-password" className="auth-field-label">
+            CREATE PASSWORD <span className="auth-field-asterisk">*</span>
           </label>
-          <div className="auth-input-container">
-            <span className="auth-input-icon">
+          <div className="auth-input-box">
+            <span className="auth-box-icon">
               <LockIcon size={16} />
             </span>
             <input
@@ -280,20 +273,20 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
               value={formData.password}
               onChange={handleChange}
               onBlur={handleBlur}
-              placeholder="Minimum 8 characters"
-              className={`auth-input ${touched.password && errors.password ? 'is-error' : ''}`}
+              placeholder="Min 8 characters"
+              className={`auth-text-input ${touched.password && errors.password ? 'has-error' : ''}`}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="auth-input-action"
+              className="auth-box-toggle"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
             </button>
           </div>
           {touched.password && errors.password && (
-            <div className="auth-error-text" role="alert">
+            <div className="auth-error-alert" role="alert">
               <AlertCircleIcon size={13} />
               <span>{errors.password}</span>
             </div>
@@ -301,35 +294,35 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
 
           {/* Dynamic Password Strength Meter */}
           {formData.password && (
-            <div className="auth-strength-container">
-              <div className="auth-strength-header">
+            <div className="auth-meter-wrap">
+              <div className="auth-meter-text">
                 <span>Password strength:</span>
-                <span className="auth-strength-label">{strength.label}</span>
+                <span className="auth-meter-rating">{strength.label}</span>
               </div>
-              <div className="auth-strength-bars">
+              <div className="auth-meter-bars">
                 {[1, 2, 3, 4].map((step) => (
                   <div
                     key={step}
-                    className={`auth-strength-segment ${
-                      strength.score >= step ? `active-${strength.score}` : ''
+                    className={`auth-meter-bar ${
+                      strength.score >= step ? `tier-${strength.score}` : ''
                     }`}
                   />
                 ))}
               </div>
-              <div className="auth-strength-criteria">
-                <div className={`auth-criterion ${strength.criteria.length ? 'met' : ''}`}>
+              <div className="auth-meter-rules">
+                <div className={`auth-rule-item ${strength.criteria.length ? 'rule-met' : ''}`}>
                   <CheckIcon size={11} />
                   <span>8+ characters</span>
                 </div>
-                <div className={`auth-criterion ${strength.criteria.uppercase ? 'met' : ''}`}>
+                <div className={`auth-rule-item ${strength.criteria.uppercase ? 'rule-met' : ''}`}>
                   <CheckIcon size={11} />
                   <span>Uppercase letter</span>
                 </div>
-                <div className={`auth-criterion ${strength.criteria.number ? 'met' : ''}`}>
+                <div className={`auth-rule-item ${strength.criteria.number ? 'rule-met' : ''}`}>
                   <CheckIcon size={11} />
                   <span>Number (0-9)</span>
                 </div>
-                <div className={`auth-criterion ${strength.criteria.special ? 'met' : ''}`}>
+                <div className={`auth-rule-item ${strength.criteria.special ? 'rule-met' : ''}`}>
                   <CheckIcon size={11} />
                   <span>Special character</span>
                 </div>
@@ -339,14 +332,12 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
         </div>
 
         {/* Confirm Password */}
-        <div className="auth-field">
-          <label htmlFor="register-confirm" className="auth-label">
-            <span>
-              Confirm Password<span className="auth-required">*</span>
-            </span>
+        <div className="auth-input-group">
+          <label htmlFor="register-confirm" className="auth-field-label">
+            CONFIRM PASSWORD <span className="auth-field-asterisk">*</span>
           </label>
-          <div className="auth-input-container">
-            <span className="auth-input-icon">
+          <div className="auth-input-box">
+            <span className="auth-box-icon">
               <LockIcon size={16} />
             </span>
             <input
@@ -358,17 +349,17 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
               onChange={handleChange}
               onBlur={handleBlur}
               placeholder="Re-enter your password"
-              className={`auth-input ${touched.confirmPassword && errors.confirmPassword ? 'is-error' : ''} ${isConfirmSuccess ? 'is-valid' : ''}`}
+              className={`auth-text-input ${touched.confirmPassword && errors.confirmPassword ? 'has-error' : ''} ${isConfirmSuccess ? 'has-valid' : ''}`}
             />
             {isConfirmSuccess ? (
-              <span className="auth-input-check" title="Passwords match">
+              <span className="auth-box-success" title="Passwords match">
                 <CheckIcon size={14} />
               </span>
             ) : (
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="auth-input-action"
+                className="auth-box-toggle"
                 aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
               >
                 {showConfirmPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
@@ -376,7 +367,7 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
             )}
           </div>
           {touched.confirmPassword && errors.confirmPassword && (
-            <div className="auth-error-text" role="alert">
+            <div className="auth-error-alert" role="alert">
               <AlertCircleIcon size={13} />
               <span>{errors.confirmPassword}</span>
             </div>
@@ -384,22 +375,20 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
         </div>
 
         {/* Terms of Service Checkbox */}
-        <div className="auth-field">
-          <label className="auth-checkbox-label">
+        <div className="auth-input-group">
+          <label className="auth-terms-box">
             <input
               type="checkbox"
               name="agreeTerms"
               checked={formData.agreeTerms}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="auth-checkbox-input"
             />
             <span>
               I agree to the{' '}
               <a
                 href="#terms"
                 onClick={(e) => e.preventDefault()}
-                className="auth-link"
               >
                 Terms of Service
               </a>{' '}
@@ -407,44 +396,46 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
               <a
                 href="#privacy"
                 onClick={(e) => e.preventDefault()}
-                className="auth-link"
               >
                 Privacy Policy
               </a>
             </span>
           </label>
           {touched.agreeTerms && errors.agreeTerms && (
-            <div className="auth-error-text" role="alert">
+            <div className="auth-error-alert" role="alert">
               <AlertCircleIcon size={13} />
               <span>{errors.agreeTerms}</span>
             </div>
           )}
         </div>
 
-        {/* Submit Button */}
+        {/* Submit Button with Checkmark Icon */}
         <button
           type="submit"
           disabled={isLoading}
-          className="auth-submit-btn"
+          className="auth-cta-button"
         >
           {isLoading ? (
             <>
-              <span className="auth-spinner" />
+              <span className="auth-btn-spinner" />
               <span>Creating Account...</span>
             </>
           ) : (
-            <span>Create Account</span>
+            <>
+              <CheckIcon size={15} />
+              <span>CREATE ACCOUNT</span>
+            </>
           )}
         </button>
       </form>
 
-      {/* Divider */}
-      <div className="auth-divider">
-        <span className="auth-divider-text">OR</span>
+      {/* OR Divider */}
+      <div className="auth-or-divider">
+        <span className="auth-or-text">OR</span>
       </div>
 
-      {/* Social Buttons */}
-      <div className="auth-social-grid">
+      {/* Social SSO Buttons */}
+      <div className="auth-sso-grid">
         <button
           type="button"
           disabled={isLoading}
@@ -456,7 +447,7 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
               });
             }
           }}
-          className="auth-social-btn"
+          className="auth-sso-btn"
         >
           <GoogleIcon size={16} />
           <span>Google</span>
@@ -473,7 +464,7 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
               });
             }
           }}
-          className="auth-social-btn"
+          className="auth-sso-btn"
         >
           <AppleIcon size={16} />
           <span>Apple</span>
@@ -481,14 +472,14 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
       </div>
 
       {/* Switch to Login */}
-      <p className="auth-switch-text">
-        Already have an account?
+      <p className="auth-bottom-switch">
+        Already registered?
         <button
           type="button"
           onClick={onSwitchToLogin}
-          className="auth-switch-btn"
+          className="auth-bottom-link"
         >
-          Sign In
+          Sign In to Account →
         </button>
       </p>
     </div>

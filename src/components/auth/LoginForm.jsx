@@ -80,13 +80,12 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
 
     setIsLoading(true);
 
-    // Client-side simulated authentication flow
     setTimeout(() => {
       setIsLoading(false);
       if (showToast) {
         showToast({
           type: 'success',
-          message: 'Signed in successfully! (Frontend flow verified)'
+          message: 'Signed in successfully!'
         });
       }
       if (onLoginSuccess) {
@@ -98,9 +97,10 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
     }, 850);
   };
 
+  // Demo auto-fill: exactly matching user's screenshot
   const handleQuickFill = () => {
     setFormData({
-      email: 'alex@example.com',
+      email: 'aakashbarasiya2001@gmail.com',
       password: 'Password123!',
       rememberMe: true,
     });
@@ -109,7 +109,7 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
     if (showToast) {
       showToast({
         type: 'info',
-        message: 'Sample login credentials populated.'
+        message: 'Demo credentials loaded.'
       });
     }
   };
@@ -119,15 +119,15 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
   const isEmailError = touched.email && !!errors.email;
 
   return (
-    <div className="auth-form-container">
+    <div className="auth-form-body">
       {/* Subtitle & Quick Auto-fill */}
-      <div className="auth-header-row">
-        <p className="auth-subtitle">Sign in to your account</p>
+      <div className="auth-header-action">
+        <p className="auth-subtitle-text">Sign in to your account</p>
         <button
           type="button"
           onClick={handleQuickFill}
-          className="auth-demo-btn"
-          title="Fill valid test credentials in one click"
+          className="auth-demo-badge"
+          title="Auto-fill demo credentials"
         >
           <SparklesIcon size={12} />
           <span>Demo Fill</span>
@@ -135,16 +135,14 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
       </div>
 
       {/* Form Elements */}
-      <form onSubmit={handleSubmit} className="auth-form" noValidate>
+      <form onSubmit={handleSubmit} className="auth-fields-stack" noValidate>
         {/* Email Field */}
-        <div className="auth-field">
-          <label htmlFor="login-email" className="auth-label">
-            <span>
-              Email Address<span className="auth-required">*</span>
-            </span>
+        <div className="auth-input-group">
+          <label htmlFor="login-email" className="auth-field-label">
+            EMAIL ADDRESS <span className="auth-field-asterisk">*</span>
           </label>
-          <div className="auth-input-container">
-            <span className="auth-input-icon">
+          <div className="auth-input-box">
+            <span className="auth-box-icon">
               <MailIcon size={16} />
             </span>
             <input
@@ -156,16 +154,16 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
               onChange={handleChange}
               onBlur={handleBlur}
               placeholder="e.g. alex@example.com"
-              className={`auth-input ${isEmailError ? 'is-error' : ''} ${isEmailSuccess ? 'is-valid' : ''}`}
+              className={`auth-text-input ${isEmailError ? 'has-error' : ''} ${isEmailSuccess ? 'has-valid' : ''}`}
             />
             {isEmailSuccess && (
-              <span className="auth-input-check" title="Valid email format">
+              <span className="auth-box-success" title="Valid email format">
                 <CheckIcon size={14} />
               </span>
             )}
           </div>
           {isEmailError && (
-            <div className="auth-error-text" role="alert">
+            <div className="auth-error-alert" role="alert">
               <AlertCircleIcon size={13} />
               <span>{errors.email}</span>
             </div>
@@ -173,14 +171,12 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
         </div>
 
         {/* Password Field */}
-        <div className="auth-field">
-          <label htmlFor="login-password" className="auth-label">
-            <span>
-              Password<span className="auth-required">*</span>
-            </span>
+        <div className="auth-input-group">
+          <label htmlFor="login-password" className="auth-field-label">
+            PASSWORD <span className="auth-field-asterisk">*</span>
           </label>
-          <div className="auth-input-container">
-            <span className="auth-input-icon">
+          <div className="auth-input-box">
+            <span className="auth-box-icon">
               <LockIcon size={16} />
             </span>
             <input
@@ -191,20 +187,20 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
               value={formData.password}
               onChange={handleChange}
               onBlur={handleBlur}
-              placeholder="Enter your password (min 8 chars)"
-              className={`auth-input ${isPassError ? 'is-error' : ''}`}
+              placeholder="Enter your password"
+              className={`auth-text-input ${isPassError ? 'has-error' : ''}`}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="auth-input-action"
+              className="auth-box-toggle"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
             </button>
           </div>
           {isPassError && (
-            <div className="auth-error-text" role="alert">
+            <div className="auth-error-alert" role="alert">
               <AlertCircleIcon size={13} />
               <span>{errors.password}</span>
             </div>
@@ -212,14 +208,13 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
         </div>
 
         {/* Remember me & Forgot Password */}
-        <div className="auth-options-row">
-          <label className="auth-checkbox-label">
+        <div className="auth-options-flex">
+          <label className="auth-remember-check">
             <input
               type="checkbox"
               name="rememberMe"
               checked={formData.rememberMe}
               onChange={handleChange}
-              className="auth-checkbox-input"
             />
             <span>Remember me</span>
           </label>
@@ -230,40 +225,43 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
               if (showToast) {
                 showToast({
                   type: 'info',
-                  message: 'Simulated password recovery link dispatched to your email.'
+                  message: 'Simulated password reset link dispatched.'
                 });
               }
             }}
-            className="auth-link"
+            className="auth-forgot-link"
           >
             Forgot Password?
           </a>
         </div>
 
-        {/* Submit Button */}
+        {/* Submit Button with Arrow Icon */}
         <button
           type="submit"
           disabled={isLoading}
-          className="auth-submit-btn"
+          className="auth-cta-button"
         >
           {isLoading ? (
             <>
-              <span className="auth-spinner" />
+              <span className="auth-btn-spinner" />
               <span>Signing In...</span>
             </>
           ) : (
-            <span>Sign In</span>
+            <>
+              <span>→</span>
+              <span>SIGN IN</span>
+            </>
           )}
         </button>
       </form>
 
-      {/* Divider */}
-      <div className="auth-divider">
-        <span className="auth-divider-text">OR</span>
+      {/* OR Divider */}
+      <div className="auth-or-divider">
+        <span className="auth-or-text">OR</span>
       </div>
 
-      {/* Social Buttons */}
-      <div className="auth-social-grid">
+      {/* Social SSO Buttons */}
+      <div className="auth-sso-grid">
         <button
           type="button"
           disabled={isLoading}
@@ -275,7 +273,7 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
               });
             }
           }}
-          className="auth-social-btn"
+          className="auth-sso-btn"
         >
           <GoogleIcon size={16} />
           <span>Google</span>
@@ -292,7 +290,7 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
               });
             }
           }}
-          className="auth-social-btn"
+          className="auth-sso-btn"
         >
           <AppleIcon size={16} />
           <span>Apple</span>
@@ -300,14 +298,14 @@ export function LoginForm({ onSwitchToRegister, onLoginSuccess, showToast }) {
       </div>
 
       {/* Switch to Register */}
-      <p className="auth-switch-text">
+      <p className="auth-bottom-switch">
         Don't have an account yet?
         <button
           type="button"
           onClick={onSwitchToRegister}
-          className="auth-switch-btn"
+          className="auth-bottom-link"
         >
-          Create Account
+          Create Account →
         </button>
       </p>
     </div>
