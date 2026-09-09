@@ -351,20 +351,14 @@ export function RegisterForm({ onSwitchToLogin, onRegisterSuccess, showToast }) 
               placeholder="Re-enter your password"
               className={`auth-text-input ${touched.confirmPassword && errors.confirmPassword ? 'has-error' : ''} ${isConfirmSuccess ? 'has-valid' : ''}`}
             />
-            {isConfirmSuccess ? (
-              <span className="auth-box-success" title="Passwords match">
-                <CheckIcon size={14} />
-              </span>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="auth-box-toggle"
-                aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
-              >
-                {showConfirmPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="auth-box-toggle"
+              aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
+            >
+              {showConfirmPassword ? <EyeOffIcon size={16} /> : <EyeIcon size={16} />}
+            </button>
           </div>
           {touched.confirmPassword && errors.confirmPassword && (
             <div className="auth-error-alert" role="alert">
