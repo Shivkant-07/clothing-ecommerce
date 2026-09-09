@@ -11,7 +11,6 @@ import Cart from "./pages/Cart/Cart";
 
 import products from "./data/products";
 
-
 // ===============================
 // Category Products Page
 // ===============================
@@ -24,7 +23,6 @@ function CategoryProducts({ category }) {
   return (
     <main className="min-h-screen bg-[#f8f7f4] px-5 py-20 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
-
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
           VELORA Collection
         </p>
@@ -39,10 +37,7 @@ function CategoryProducts({ category }) {
 
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {categoryProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-            />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
 
@@ -51,26 +46,21 @@ function CategoryProducts({ category }) {
             No products available in this category.
           </p>
         )}
-
       </div>
     </main>
   );
 }
-
 
 // ===============================
 // New Arrivals Page
 // ===============================
 
 function NewArrivalsPage() {
-  const newProducts = products.filter(
-    (product) => product.isNew
-  );
+  const newProducts = products.filter((product) => product.isNew);
 
   return (
     <main className="min-h-screen bg-[#f8f7f4] px-5 py-20 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
-
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
           Fresh Picks
         </p>
@@ -81,18 +71,13 @@ function NewArrivalsPage() {
 
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {newProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-            />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
-
       </div>
     </main>
   );
 }
-
 
 // ===============================
 // Trending Products Page
@@ -106,7 +91,6 @@ function TrendingPage() {
   return (
     <main className="min-h-screen bg-[#f8f7f4] px-5 py-20 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
-
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
           Most Wanted
         </p>
@@ -117,18 +101,13 @@ function TrendingPage() {
 
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {trendingProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-            />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
-
       </div>
     </main>
   );
 }
-
 
 // ===============================
 // App
@@ -137,50 +116,34 @@ function TrendingPage() {
 function App() {
   return (
     <BrowserRouter>
-
       <Navbar />
 
       <Routes>
-
         {/* Home */}
-        <Route
-          path="/"
-          element={<Home />}
-        />
+        <Route path="/" element={<Home />} />
 
         {/* Categories */}
-        <Route
-          path="/categories"
-          element={<Categories />}
-        />
+        <Route path="/categories" element={<Categories />} />
 
         {/* Category Products */}
         <Route
           path="/categories/men"
-          element={
-            <CategoryProducts category="Men" />
-          }
+          element={<CategoryProducts category="Men" />}
         />
 
         <Route
           path="/categories/women"
-          element={
-            <CategoryProducts category="Women" />
-          }
+          element={<CategoryProducts category="Women" />}
         />
 
         <Route
           path="/categories/shoes"
-          element={
-            <CategoryProducts category="Shoes" />
-          }
+          element={<CategoryProducts category="Shoes" />}
         />
 
         <Route
           path="/categories/accessories"
-          element={
-            <CategoryProducts category="Accessories" />
-          }
+          element={<CategoryProducts category="Accessories" />}
         />
 
         {/* New Arrivals */}
@@ -206,11 +169,9 @@ function App() {
           path="/cart"
           element={<Cart />}
         />
-
       </Routes>
 
       <Footer />
-
     </BrowserRouter>
   );
 }
